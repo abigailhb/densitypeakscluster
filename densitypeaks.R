@@ -74,7 +74,7 @@ clusterDistSum <- function(dataInfo,peaks) {
 	centroidMatrix = dataMatrix[peaks,]
 	cDists = centroidDists(dataMatrix,centroidMatrix)
     sse = sum(apply(cDists, 1, min))
-    #printf("    The cluster sum of squares for error %f\n",sse)
+    printf("    The cluster sum of squares for error %f\n",sse)
     sse
 }
 
@@ -157,54 +157,8 @@ plotHighScorePoints <- function(data,result)
 	threshold=u+m*4
 	outliers=which(product>threshold)
 	
-	if (length(outliers) < 2)
-	{
-		View(product)
-		printf("Threshold is %f\n",threshold)
-		stop("Can't plot high score points because I did not 
-			find 2 or more outliers in the data.\n")
-		boxplot(product)
-	}
-	else
-	{
-		plotData(data,'High Score Points',outliers)
-	}
-}
-
-# Loads the 8 test data sets into a list.
-# Return is a list(list(name,fileName,nClusters,df)) where df is the data in a data frame.
-# 
-loadShapeSets <- function()
-{
-	# Define data sets
-	rowNames=c('x','y','c')
-	fileNames=c('flame.txt', 'Aggregation.txt', 'Compound.txt', 'D31.txt', 
-		'jain.txt', 'pathbased.txt', 'R15.txt', 'spiral.txt')
-	nf=length(fileNames)
-	ccounts=c(2,7,5,31,2,3,15,3) # true cluster counts for each of the above data sets
-	ret=list()
-	dsNames=list() # to set list names
+	plotData(data,'High Score Points',outliers)
 	
-	for(dataSetIndex in 1:nf)
-	{
-		fileName=fileNames[dataSetIndex]
-		name=tolower(file_path_sans_ext(fileName))
-		nClusters=ccounts[dataSetIndex]
-		dsNames[[dataSetIndex]]=name
-		
-		# Load file
-		path=paste(sep="", 'Data Sets\\', fileName)
-		dataFrame=read.csv(path,sep="\t",col.names=rowNames,strip.white=TRUE)
-		
-		thisDf=list(name=name,fileName=fileName,nClusters=nClusters,df=dataFrame)
-		
-		# append
-		i=length(ret)+1
-		ret[[i]] = thisDf
-	}
-	
-	names(ret)=dsNames
-	ret
 }
 
 # Loads test data set into a list.
