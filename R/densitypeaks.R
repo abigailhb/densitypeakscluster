@@ -176,9 +176,6 @@ loadDataInfo <- function(fileName)
 	list(name=name,fileName=fileName,nClusters=nClusters,df=dataFrame)
 }
 
-
-
-
 # High level function to compare sensitivity of Rho*Delta cluster peak separation from bulk of points.
 # This requires the Shape Sets data files from here:  http://cs.joensuu.fi/sipu/datasets/
 #   to be in a subdir 'Data Sets'
