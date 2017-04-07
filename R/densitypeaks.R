@@ -13,15 +13,15 @@ plotData <- function(dframe,title="Unset",highlightPoints)
 	n=dim(dframe)[1]
 	cs=vector(length=n)
 	group = length(levels(factor(dframe$c)))
-	color = c("black","red","green3","blue","cyan",
-		"magenta","yellow","orange","chartreuse",
+	color = c("black","red","green3","blue","cyan", "magenta","yellow","orange","chartreuse",
 		"chocolate","burlywood","brown1","blueviolet",
 		"darkgreen","darkmagenta","darkkhaki","deepskyblue4","dodgerblue",
 		"darkorange","firebrick1","darkred","forestgreen","darkslateblue",
 		"deeppink","goldenrod4","deeppink4","hotpink3","mediumorchid4","maroon") 
 	for(i in 1:group){
-       cs[dframe$c==i]=color[i]
+       	cs[dframe$c==i]=color[i]
 	}
+
 	if(!missing(highlightPoints)){
 		cs[highlightPoints]="blue"
 	}
@@ -62,8 +62,8 @@ mDist <- function(dframe)
 # each of the centroids.
 centroidDists <- function(dataMatrix, centroidMatrix) {
     dists = apply(dataMatrix, 1, function(point)
-        sapply(1:nrow(centroidMatrix), function(dim)
-              dist(rbind(point, centroidMatrix[dim, ]))))
+        		sapply(1:nrow(centroidMatrix), function(dim)
+              	dist(rbind(point, centroidMatrix[dim, ]))))
     t(dists)
 }
 
@@ -111,8 +111,10 @@ densityPeakCluster <- function(dataInfo,mratio=0.04)
 	# The one with max density will have NA
 
     eps=.Machine$double.eps
+
     # densities, in distance sort order
 	sortedDensities = t(sapply(1:n,function(i) rho[doi[i,]]))
+
 	# index into sortedDensities is not orig index, it's distance sorted index
 	refs = sapply(1:n, function(i) doi[i,which(sortedDensities[i,] > rho[i] + eps)[1]])
 	
@@ -125,20 +127,15 @@ densityPeakCluster <- function(dataInfo,mratio=0.04)
 	delta[delta > 99999]=maxd
 	
 	delta = delta / max(delta)
-	#
+
 	# Find top nCluster points
-	#
 	product=(rho*delta)
 	peaks=rev(order(product))[1:dataInfo$nClusters]
 
-	# 
 	# Compute cluster inner distance sum
-	#
 	score=clusterDistSum(dataInfo,peaks)
 		
-	#
 	# Build the output
-	#
 	clusterResult=list(rho=rho,delta=delta,score=score,peaks=peaks)
 }
 
@@ -146,16 +143,17 @@ densityPeakCluster <- function(dataInfo,mratio=0.04)
 # 
 plotHighScorePoints <- function(data,result)
 {
-	product=(result$rho * result$delta)
+	product = (result$rho * result$delta)
 	
 	# stats
-	u=mean(product)
-	s=sqrt(var(product))
-	m=mean(abs(product-u)) # mean diff, to be insensitive to outliers
+	u = mean(product)
+	s = sqrt(var(product))
+	# mean diff, to be insensitive to outliers
+	m = mean(abs(product - u)) 
 	
 	# select outliers: arbitrarily decided on mean + meanDiff * const
-	threshold=u+m*4
-	outliers=which(product>threshold)
+	threshold = u + m * 4
+	outliers = which(product > threshold)
 	
 	plotData(data,'High Score Points',outliers)
 	
@@ -194,7 +192,7 @@ plotMLRatio <- function(dataInfo)
 	{
 		result=densityPeakCluster(dataInfo,mratio)
 		scores[i]=result$score
-		i=i+1
+		i = i + 1
 	}
 	plot(x=mrs,y=scores, type='l', col="deeppink4", 
 				main='SSE vs ratio',xlab='ratio',ylab='SSE', lwd = 3)
