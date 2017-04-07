@@ -10,8 +10,8 @@ printf <- function(...) cat(sprintf(...))
 # 
 plotData <- function(dframe,title="Unset",highlightPoints)
 {
-	n=dim(dframe)[1]
-	cs=vector(length=n)
+	n = dim(dframe)[1]
+	cs = vector(length=n)
 	group = length(levels(factor(dframe$c)))
 	color = c("black","red","green3","blue","cyan", "magenta","yellow","orange","chartreuse",
 		"chocolate","burlywood","brown1","blueviolet",
@@ -19,7 +19,7 @@ plotData <- function(dframe,title="Unset",highlightPoints)
 		"darkorange","firebrick1","darkred","forestgreen","darkslateblue",
 		"deeppink","goldenrod4","deeppink4","hotpink3","mediumorchid4","maroon") 
 	for(i in 1:group){
-       	cs[dframe$c==i]=color[i]
+    	cs[dframe$c==i]=color[i]
 	}
 
 	if(!missing(highlightPoints)){
