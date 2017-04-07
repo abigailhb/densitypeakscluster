@@ -87,24 +87,24 @@ clusterDistSum <- function(dataInfo,peaks) {
 densityPeakCluster <- function(dataInfo,mratio=0.04)
 {
 	data = dataInfo$df
-	n=dim(data)[1]
+	n = dim(data)[1]
 		
 	# Dist to every other point
-	pds=mDist(data)
+	pds = mDist(data)
 	
 	# Dist sort indices
-	doi = t(apply(pds,1,order))
+	doi = t(apply(pds, 1, order))
 
 	# Local density: mean of dist to closest M neighbors
 
-	m=round(max(n*mratio,2))
+	m = round(max(n * mratio, 2))
 	#printf("m = %d\n",m)
 
-	rho = sapply(1:n,function(i) mean(pds[i,doi[i,1:m]]))
+	rho = sapply(1:n, function(i) mean(pds[i,doi[i,1:m]]))
 
 	# subtract from max to invert rho
 	rhomax = max(rho)
-	rho = exp(log(rho/rhomax,base=0.5))
+	rho = exp(log(rho/rhomax, base=0.5))
 	rho = rho / max(rho)
 	
 	# Ref neighbor: The index of the nearest neighbor of higher density
@@ -122,21 +122,21 @@ densityPeakCluster <- function(dataInfo,mratio=0.04)
 	delta = sapply(1:n, function(i) pds[i, refs[i]])
 	
 	# special handproductg for max rho
-	maxd=max(delta[!is.na(delta) & (delta < 99999)])
-	delta[is.na(delta)]=maxd
-	delta[delta > 99999]=maxd
+	maxd = max(delta[!is.na(delta) & (delta < 99999)])
+	delta[is.na(delta)] = maxd
+	delta[delta > 99999] = maxd
 	
 	delta = delta / max(delta)
 
 	# Find top nCluster points
-	product=(rho*delta)
-	peaks=rev(order(product))[1:dataInfo$nClusters]
+	product = rho * delta
+	peaks = rev(order(product))[1:dataInfo$nClusters]
 
 	# Compute cluster inner distance sum
-	score=clusterDistSum(dataInfo,peaks)
+	score = clusterDistSum(dataInfo, peaks)
 		
 	# Build the output
-	clusterResult=list(rho=rho,delta=delta,score=score,peaks=peaks)
+	clusterResult = list(rho=rho, delta=delta, score=score, peaks=peaks)
 }
 
 # Find high rho*delta points and show them
@@ -165,13 +165,13 @@ plotHighScorePoints <- function(data,result)
 loadDataInfo <- function(fileName)
 {
 	# Define data sets
-	rowNames=c('x','y','c')
-	name=tolower(file_path_sans_ext(fileName))
-	dsNames=list() # to set list names
-	path=paste(sep="", 'Data Sets\\', fileName)
-	dataFrame=read.csv(path,sep="\t",col.names=rowNames,strip.white=TRUE)
+	rowNames = c('x','y','c')
+	name = tolower(file_path_sans_ext(fileName))
+	dsNames = list() # to set list names
+	path = paste(sep="", 'Data Sets\\', fileName)
+	dataFrame = read.csv(path,sep="\t", col.names=rowNames, strip.white=TRUE)
 	nClusters = length(levels(factor(dataFrame$c)))
-	list(name=name,fileName=fileName,nClusters=nClusters,df=dataFrame)
+	list(name=name, fileName=fileName, nClusters=nClusters, df=dataFrame)
 }
 
 # High level function to compare sensitivity of Rho*Delta cluster peak separation from bulk of points.
@@ -184,7 +184,7 @@ plotMLRatio <- function(dataInfo)
 	#
 	# Iteration m-ratio values
 	#
-	mrs=seq(0.01, 0.1, by=0.005) # the mratio values to try
+	mrs = seq(0.01, 0.1, by=0.005) # the mratio values to try
 
 	scores=vector(length=length(mrs)) # for separation scores
 	i=1
