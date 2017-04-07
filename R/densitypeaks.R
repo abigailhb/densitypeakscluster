@@ -186,15 +186,15 @@ plotMLRatio <- function(dataInfo)
 	#
 	mrs = seq(0.01, 0.1, by=0.005) # the mratio values to try
 
-	scores=vector(length=length(mrs)) # for separation scores
-	i=1
+	scores = vector(length=length(mrs)) # for separation scores
+	i = 1
 	for (mratio in mrs)
 	{
-		result=densityPeakCluster(dataInfo,mratio)
-		scores[i]=result$score
+		result = densityPeakCluster(dataInfo, mratio)
+		scores[i] = result$score
 		i = i + 1
 	}
-	plot(x=mrs,y=scores, type='l', col="deeppink4", 
+	plot(x=mrs, y=scores, type='l', col="deeppink4", 
 				main='SSE vs ratio',xlab='ratio',ylab='SSE', lwd = 3)
 	legend('topright', legend=dataInfo$fileName, fill="deeppink4", 
 		bty = 'n', lwd = 3, border = NA)
